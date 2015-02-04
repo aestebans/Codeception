@@ -1,6 +1,6 @@
 # Introdución
 
-La prueba con origen, no es una idea nueva. No se puede dormir tranquilo, no sabiendo si los cambios realizados afectarán al conjunto de la aplicación
+La prueba en el origen, no es una idea nueva. No se puede dormir tranquilo, no sabiendo si los cambios realizados afectarán al conjunto de la aplicación
 Tener la aplicación totalmente probada, da confianza en la estabilidad de la aplicación.
 
 En la mayoría de los casos, las pruebas no garantizan que la aplicación funcione al 100%, eso solo una suposición. No se pueden predecir todos los posibles escenarios y situaciones excepcionales en las aplicaicones complejas, pero con las pruebas se pueden probar las partes mas importantes y asegurar que hacen lo previsto
