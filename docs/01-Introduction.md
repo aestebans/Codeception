@@ -1,25 +1,26 @@
-# Introduction
+# Introdución
 
-The idea behind testing is not new. You can't sleep well if you are not confident that your last commit didn't take down the whole application.
-Having your application covered with tests gives you more trust in the stability of your application. That's all.
+La prueba con origen, no es una idea nueva. No se puede dormir tranquilo, no sabiendo si los cambios realizados afectarán al conjunto de la aplicación
+Tener la aplicación totalmente probada, da confianza en la estabilidad de la aplicación.
 
-In most cases tests don't guarantee that the application works 100% as it is supposed to. You can't predict all possible scenarios and exceptional situations for complex apps, but with tests you can cover the most important parts of your app and at least be sure they work as predicted.
+En la mayoría de los casos, las pruebas no garantizan que la aplicación funcione al 100%, eso solo una suposición. No se pueden predecir todos los posibles escenarios y situaciones excepcionales en las aplicaicones complejas, pero con las pruebas se pueden probar las partes mas importantes y asegurar que hacen lo previsto
 
-There are plenty of ways to test your application. The most popular paradigm is [Unit Testing](http://en.wikipedia.org/wiki/Unit_testing). As for web applications, testing the controller, or model in isolation doesn't prove your application is working. To test the behavior of your application as a whole, you should write functional or acceptance tests.
+Hay un montón de maneras de probar una aplicación. La mas popular es [Pruebas unitarias](http://es.wikipedia.org/wiki/Prueba_unitaria). Para aplicaciones web, probar las clases controladores o del modelo, no significa que la aplicación funcione. Para probar la aplicación en su conjunto es necesario escribir pruebas funcionales o de aceptación
 
-The Codeception testing framework distinguishes these levels of testing. Out of the box you have tools for writing unit, functional, and acceptance tests in a single manner.
+El framework Codeception distingue los diferentes niveles de pruebas. 
 
-Let's review the listed testing paradigms in reverse order.
+Vamos a revisar los paradigmas de pruebas enumerados en el orden inverso.
 
-### Acceptance Tests
+### Test de aceptación
 
-How does your client, manager, or tester, or any other non-technical person, know your website is working? By opening the browser, accessing a site, clicking on links, filling in the forms, and actually seeing the content on a web page. That person has no idea of the framework, database, web-server, or programming language you use or why the application did not behave as expected.
+¿Como pueden saber, el cliente, gerente, probador o cualquier persona no técnica que el sitio web funciona correctamente?
+Solamente, con el navegador, accediendo al sitio, pulsando en los enlaces, rellenando formularios y comprobar que ve el resultado esperado. Esta persona no tiene ni idea de framework, base de datos, servidor web, o del lenguaje de programamción usado o porque la aplicación no hizo lo esperado.
 
-Acceptance tests can cover standard but complex scenarios from a user's perspective. With acceptance tests you can be confident that users, following all defined scenarios, won't get errors.
+Las pruebas de acepctación pueden cubrir escenarios estandar complejos desde la perspectiva del usuario. Con las pruebas de aceptación se puede estar seguro de que los usuarios, en base a los escenarios definidos, no obtendrán errores.
 
-Please, note that **any website** can be covered with acceptance tests. Even if you use a very custom CMS or framework.
+hay que tener en cuenta que **cualquier sitio web** puede estar cubierto por pruebas de aceptación, independiente de que sea un CMS o un framework.
 
-#### Sample acceptance test
+#### Ejemplo de test de aceptación
 
 ```php
 <?php
@@ -33,27 +34,27 @@ $I->see('Thank you for Signing Up!');
 
 #### Pros
 
-* can be run on any website
-* can test javascript and ajax requests
-* can be shown to your clients and managers
-* most stable in support: less affected by changes in source code or technologies
+* puede ejecutarse sobre cualquier sitio web
+* puede realizar pruebas javascript y peticiones ajax
+* se puede presentar a los clientes y gerentes la ejecución y resultados
+* hace mas estable el mantenimiento: los cambios en el código fuente o en la tecnología se ven menos afectados
 
-#### Cons
-* the slowest: requires running browser and database repopulation
-* fewer checks can lead to false-positive results
-* yep, they are really slow
-* not stable in execution: rendering and javascript issues can lead to unpredictable results
+#### Contras
+* lentitud: necesita ejecutarse en un navegador y rellenar las tablas
+* con pocos controles pueden dar a resultados dudosos
+* si, las pruebas son lentas
+* la ejecución no es estable: la presentación y los script de javascript pueden ocasionar resultados impredecibles
 
 
-### Functional Tests
+### Test funcionales
 
-What if we could check our application without running it on a server? This way we could see detailed exceptions on errors, have tests running faster, and check the database for values we expect. That's what functional tests are for.
+¿Y si pudiesemos probar nuestra aplicación sin ejecutarlo en un servidor? De esta manera podemos ver excepciones detalladas sobre los errores, las pruebas son mas rápidas y podemos chequear la base de datos con los valores esperados. Para esto son las pruebas funcionales.
 
-For functional tests you emulate a web request (`$_GET` and `$_POST` variables) and send it into your application which returns HTML response. Inside a test you can make assertions about the response, and you can check if the data was successfully stored into the database.
+En las pruebas funcionales, se emulas las peticiones a la web (variables `$_GET` y `$_POST`) y recibir la respuesta HTML. Dentro de una prueba se pueden hacer confirmaciones y se puede comprobar si los datos se almacenan correctamente en la base de datos.
 
-For functional tests your application should be prepared to be run in a test environment. Codeception provides connectors to several popular PHP frameworks, or you could write your own.
+Para las pruebas funcionales, su aplicación tiene que estar preparada para ser ejecutada en un entorno de pruebas. Codeception tiene conectores para los frameworks PHP mas populares, o se puede escribir el suyo propio.
 
-#### Sample functional test
+#### Ejemplo de test funcional
 
 ```php
 <?php
@@ -69,26 +70,26 @@ $I->seeInDatabase('users', array('email' => 'miles@davis.com'));
 
 #### Pros
 
-* like acceptance tests, but much faster
-* can provide more detailed reports
-* you can still show this code to managers and clients
-* stable enough: only major code changes, or moving to other framework, can break them
+* Como las pruebas de aceptación, pero mucho mas rápido
+* Proporciona informes mas detallados
+* Se puede mostrar el código a los directivos y clientes
+* Suficiente estable: solo grandes cambios, o el traslado a otro framework podrían alterarlo.
 
-#### Cons
+#### Contras
 
-* javascript and ajax can't be tested
-* by emulating the browser you might get more false-positive results
-* requires a framework
+* javascript y ajax no pueden ser probados
+* Al emular el navegador puede inducir a falsos resultados
+* Necesita un framework
 
-### Unit Tests
+### Test unitarios
 
-Testing pieces of code before coupling them together is highly important as well. This way you can be sure that some deeply hidden feature still works, even if it was not covered by functional or acceptance tests. This also proves that you produced stable and testable code.
+Probar trozos de código antes de integrarlos en la aplicación es muy importante. De esta manera aspectos que no pudieron ser probados por las pruebas funcionales o de aceptación, se comprueban. Esto permite demostrar que el código es estable y comprobable.
 
-Codeception is created on top of [PHPUnit](http://www.phpunit.de/). If you have experience writing unit tests with PHPUnit you can continue doing so. Codeception has no problem executing standard PHPUnit tests, but Codeception provides some well built tools to make your unit tests simpler and cleaner.
+Codeception está creado como una capa superior de [PHPUnit](http://www.phpunit.de/). Si se tiene experiencia escribiendo pruebas en PHPUnit, se puede seguir hacieéndose. Codeception no tiene problemas para ejecutar pruebas estandar de PHPUnit, pero Codeception tiene herramientas para hacer de forma mas simple y clara las pruebas.
 
-Even inexperienced developers should understand what is tested and how. Requirements and code can change rapidly, and unit tests should be updated every time to fit the requirements. The better you understand the testing scenario, the faster you can update it for new behavior. 
+Los desarrolladores sin experiencia, tienen que entender los que se tiene que probar y como. Requisitos y código cambía muy a menudo y las pruebas unitarios deben de actualizarse para adpatarse a las necesidades. Un mayor conocimiento del escenario de las pruebas permite de una forma mas rápida, actualizar las pruebas para el cambio.
 
-#### Sample integration test
+#### Ejemplo de test de integración
 
 ```php
 <?php
@@ -106,18 +107,18 @@ function testSavingUser()
 
 #### Pros
 
-* fastest (well, in the current example, you still need database repopulation)
-* can cover rarely used features
-* can test stability of application core
-* you can only be considered a good developer if you write them :)
+* rápido, pero es necesario rellenar las tablas
+* cubre las funciones que raramente se usan
+* permite probar la estabilidad del nucleo de la aplicación
+* es necesario escribir pruebas de test para certificar que es un buen programador :)
 
-#### Cons
+#### Contras
 
-* doesn't test connections between units
-* unstable in support: very sensitive to code changes
+* no prueba la conexión entre unidades
+* no es muy estable para mantenimiento: es muy sensible a los cambios de código
 
-## Conclusion
+## Conclusión
 
-Despite the wide popularity of TDD, not all PHP developers ever write automated tests for their applications. The Codeception framework was developed to make testing actually fun. It allows writing unit, functional, integration, and acceptance tests, in one style.
+A pesar de la popularidad de TDD, no todos los desarrolladores escriben test para automatizar las pruebas de sus aplicaciones. El framework Codeception se ha desarrollado para hacer que las pruebas sean agradables. Permite escribir pruebas unitarias, funcionales, de integración y de aceptación de la misma manera.
 
-It could be called a BDD framework. All Codeception tests are written in a descriptive manner. Just by looking at the test body you can get a clear understanding of what is being tested and how it is performed. Even complex tests with many assertions are written in a simple PHP DSL.
+Podría decirse que es un framework BDD. Todas las pruebas en Codeception se escriben de forma descriptiva. Con sólo mirar el texto de prueba se puede entender claramente lo que se está probando y cómo se realiza. Incluso las pruebas complejas, con muchas afirmaciones, se escriben de una forma sencilla DSL PHP.
