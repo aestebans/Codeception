@@ -1,11 +1,11 @@
-# Modules and Helpers
+# Módules y Asistentes
 
-Codeception uses modularity to create a comfortable testing environment for every test suite you write. 
-Modules allow you to choose the actions and assertions that can be performed in tests.
+Para crear un entorno confortable de pruebas, Codeception utiliza modularidad para grupo d epurebas que se escribe.
+Los módulos permiten elegir las acciones y afirmaciones que se quieran realizar para las pruebas
 
-All actions and assertions that can be performed by the Tester object in a class are defined in modules. It might look like Codeception limits you in testing, but that's not true. You can extend the testing suite with your own actions and assertions, by writing them into a custom module.
+Todas las acciones y afirmaciones que s epueden realizar en un objeto Tester en una clase, se definen en los módulos. Podría parecer que Codeception te limita en las pruebas, pero no es cierto. Puedes ampliar el grupo de pruebas con tus propias acciones y afirmaciones, escribiéndolos en un módulo personalizado.
 
-Let's look at the following test:
+Miremos el siguiente ejemplo:
 
 ```php
 <?php
@@ -17,10 +17,10 @@ $I->seeFileFound('running.lock');
 ?>
 ```
 
-It can operate with different entities: the web page can be loaded with the PhpBrowser module, the database assertion uses the Db module, and file state can be checked with the Filesystem module. 
+Se puede operar con diferentes entidades: la página web se carga con el módulo PHPBrowser, las afirmaciones de la base de datos utilizan el módulo Db, y un fichero de estado puede ser verificado con el módulo Filesystem.
 
-Modules are attached to Actor classes in the suite config.
-For example, in `tests/functional.suite.yml` we should see:
+Los módulos son adjuntados en la clase Actor en el fichero de configuración dle grupo .
+Por ejemplo, en `tests/functional.suite.yml` podemos ver:
 
 ```yaml
 class_name: FunctionalTester
@@ -28,23 +28,23 @@ modules:
     enabled: [PhpBrowser, Db, Filesystem]
 ```
 
-The FunctionalTester class has its methods defined in modules. Actually it doesn't contain any of them, but rather acts as a proxy. It knows which module executes this action and passes parameters into it. To make your IDE see all of the FunctionalTester methods, you use the `build` command. It generates the definition of the FunctionalTester class by copying the signatures from the corresponding modules.
+La clase FunctionalTester tiene sus métodos definidos en módulos. Actualmente no contiene ninguna de ellas, sino que actua como un proxy. Se sabe que módulo ejecuta esta acción y los parámetros que pasa. Para que el IDE vea todos los métodos de FunctionalTester, se utiliza el comando `build`. El genera la definición de la clase FunctionalTester copiando las firmas en los correspondientes módulos.
 
-## Standard Modules
+## Módulos estandar
 
-Codeception has many bundled modules which will help you run tests for different purposes and different environments. The number of modules is not constant -- it's supposed to grow as more frameworks and ORMs are supported. See all of them listed in the main menu under the Modules section.
+Codeception tiene muchos módulos empaquetados que ayudan a realizar pruebas para diferentes propósitos y diferentes ambientes. El número de módulos va creciendo constantemente a medida que se soportan mas frameworks y ORM`s. Se pueden ver la lista de módulos en el menú principal en la sección módulos.
 
-All of these modules are documented. You can review their detailed references on [GitHub](https://github.com/Codeception/Codeception/tree/master/docs/modules).
+Todos esos módulos estan documentados. Se puede revisar sus referencias detalladas en [GitHub](https://github.com/Codeception/Codeception/tree/master/docs/modules).
 
-## Helpers
+## Asistentes
 
-Codeception doesn't restrict you to only the modules from the main repository. No doubt your project might need your own actions added to the test suite. By running the `bootstrap` command, Codeception generates three dummy modules for you, one for each of the newly created suites. These custom modules are called 'Helpers', and they can be found in the `tests/_support` directory.
+Codeception no restringe solo los módulos desde el directorio principal. Sin duda, un proyecto podría necesitar añadir sus propias acciones al grupo de pruebas. Al ejecutar el comando `bootstrap`, Codeception genera tres módulos ficticios, uno por cada uno de los grupos de pruebas de nueva creación. Estos módulos personalizados son denominados 'Asistentes', y se encuentran en el directorio `tests/_support`.
 
-It's a good idea to define missing actions or assertion commands in helpers.
+Es una buena idea definir las acciones o comandos que faltan en los asistentes.
 
-Note: Helpers class names must end with "*Helper.php"
+Nota: Los nombres de las clases asistentes deben terminar por "*Helper.php"
 
-Let's say we are going to extend the FunctionalHelper class. By default it's linked with a FunctionalTester class and functional test suite.
+Digamos que vamos a extender la clase FunctionalHelper class. Por defecto el asistente esta relacionado con una clase FunctionalTester y un grupo de pruebas funcional.
 
 ```php
 <?php
@@ -57,13 +57,13 @@ class FunctionalHelper extends \Codeception\Module
 ?>
 ```
 
-As for actions, everything is quite simple. Every action you define is a public function. Write any public method, run the `build` command, and you will see the new function added into the FunctionalTester class.
+En cuanto a las acciones, todo es bastante simple. Cada accion se define en una función pública. Escribe cualquier método público y ejecuta el comando `build`, y verá la nueva función añadidia a la clase FunctionalTester.
 
-Note: Public methods prefixed by `_` are treated as hidden and won't be added to your Actor class. 
+Nota: Los métodos públicos con el prefijo `_` son tratados como ocultos y no se añadirán a su clase actor. 
 
-Assertions can be a bit tricky. First of all, it's recommended to prefix all your assert actions with `see` or `dontSee`.
+Las afirmaciones pueden ser un poco mas complicadas. Primero de todo, es recomendable poner los prefijos `see` o `dontSee` a todas las afirmaciones.
 
-Name your assertions like this:
+Ejemplo de como llamar a las afirmaciones:
 
 ```php
 <?php
@@ -72,7 +72,7 @@ $I->seeClassIsLoaded($classname);
 $I->dontSeeUserExist($user);
 ?>
 ```
-And then use them in your tests:
+Y luego llamarlar en sus pruebas:
 
 ```php
 <?php
@@ -83,7 +83,7 @@ $I->dontSeeUserExist($user);
 ?>
 ```
 
-You can define asserts by using assertXXX methods in modules. Not all PHPUnit assert methods are included in modules, but you can use PHPUnit static methods from the `PHPUnit_Framework_Assert` class to leverage all of them.
+Se pueden definir afirmaciones usando métodos assertXXX en módules. No todos métodos de afirmación de PHPUnit estan incluidos en módulos, pero podemos usar métodos estáticos de PHPUnit desd ela clase `PHPUnit_Framework_Assert` para aprovechar todos ellos.
 
 ```php
 <?php
@@ -97,7 +97,7 @@ function seeClassExist($class)
 ?>
 ```
 
-In your helpers you can use these assertions:
+En sus asistentes puede usar estas afirmaciones:
 
 ```php
 <?php
@@ -115,23 +115,23 @@ function seeCanCheckEverything($thing)
 ?>
 ```
 
-Just type `$this->assert` to see all of them.
+Con `$this->assert` se pueden ver todos ellos.
 
 
-### Resolving Collisions
+### Resolviendo colisiones
 
-What happens if you have two modules that contain the same named actions?
-Codeception allows you to override actions by changing the module order.
-The action from the second module will be loaded and the action from the first one will be ignored.
-The order of the modules can be defined in the suite config.
+¿Que ocurre si tenemos dos módulos que contienen acciones con el mismo nombre?
+Codeception permite anular acciones cambiando el orden de los módulos
+La acción del segundo módulo será leída y la del primer módulo será ignorada.
+El orden de los módulos se define en la configuración del grupo.
 
-### Connecting Modules
+### Módulos de conexión
 
-It's possible that you will need to access internal data or functions from other modules. For example, for your module you might need a connection from Doctrine, or a web browser from Symfony.
+Es posible que se necesite acceder a datos o funciones internas de otro módulo. Por ejemplo se podría necesitar una conexion con Doctrine o un navegador web de Symfony.
 
-Modules can interact with each other through the `getModule` method. Please note that this method will throw an exception if the required module was not loaded.
+Los módulos pueden interactuar entre ellos a través del método`getModule`. Hay que tener en cuenta que dará una excepción si el módulo requerido no está cargado.
 
-Let's imagine that we are writing a module that reconnects to a database. It's supposed to use the dbh connection value from the Db module.
+Imaginemos que se quiere escribir un módulo que conecte con la base de datos. Se supone que debe usar los valores de conexión dbh del módulo Db.
 
 ```php
 <?php
@@ -144,11 +144,11 @@ function reconnectToDatabase() {
 ?>
 ```
 
-By using the `getModule` function, you get access to all of the public methods and properties of the requested module. The dbh property was defined as public specifically to be available to other modules.
+Mediante el uso de la función `getModule`, se tnedrá acceso a todos los métodos públicos y propiedades del módulo solicitado. La propiedad dbh se definió como pública especificamente para estar accesible para otros módulos.
 
-This technique may be also useful if you need to perform a sequence of actions taken from other modules.
+Esta técnica se puede utilizar cuando se necesite llevar a cabo una secuencia de acciones de otros métodos.
 
-For example:
+Por ejemplo:
 
 ```php
 <?php
