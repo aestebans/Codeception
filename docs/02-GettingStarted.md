@@ -1,35 +1,35 @@
-# Getting Started
+# Empezando
 
-Let's take a look at Codeception's architecture. We assume that you already [installed](http://codeception.com/install) it, and bootstrapped your first test suites. Codeception has generated three of them: unit, functional, and acceptance. They are well described in the previous chapter. Inside your __/tests__ folder you will have three config files and three directories with names corresponding to these suites. Suites are independent groups of tests with a common purpose. 
+Echemos un vistazo a la arquitectura de Codeception. Entendemos que ya ha sido instalado [instalado](http://codeception.com/install), y que instalaste las primeras pruebas. Codeception ha generado tres de ellas: unitaria, funcional, y de aceptación. En el capítulo anterior se describen. Dentro de la carpeta __/tests__ hay tres ficheros de configuración y tres directorios cuyos nombres corresponden al tipo de pruebas. Cada grupo es independiente con un propósito común.
 
-## Actors
+## Actores
 
-One of the main concepts of Codeception is representation of tests as actions of a person. We have a UnitTester, who executes functions and tests the code. We also have a FunctionalTester, a qualified tester, who tests the application as a whole, with knowledge of its internals. And an AcceptanceTester, a user that works with our application through an interface that we provide.
+Una de los principales conceptos de Codeception es la representación de las pruebas como acciones realizadas por una persona. Tambien existe un testeador Unitario, que ejcecuta funciones y prueba el código. También hay un testeador Funcional, un probador cualificado, que pone a prueba la aplicación en su conjunto, que conoce el funcionamiento interno de la misma. Y tambien tenemos un testeador Aceptación, un usuario final que trabaja con la aplicaicón con el interface que le proporcionamos.
 
-Each of these Actors are PHP classes along with the actions that they are allowed to do. As you can see, each of these Actors have different abilities. They are not constant, you can extend them. One Actor belongs to one testing suite. 
+Cada uno de estos actores son clases PHP, junto con las acciones que les permite hacer.Como se puede apreciar, cada uno de los actores tiene capacidades diferentes. Ellos nos son constantes, se pueden ampliar. Un actor pertenece a un grupo de pruebas.
 
-Actor classes are not written but generated from suite configuration. When you change configuration, actor classes are **rebuilt automatically**.
+Las clases actores, no están escritas, se generan automáticamente  a partir de la configuración del tipo de test. Cuando cambia la configuración, las clases actores se vuelven a **generar automaticamente**.
 
-If Actor classes are not created or updated as you expect, try to generate them manually with `build` command:
+Si las clases no se regenerean o actualizan como esperabam se pueden hacer de forma manual con el comando `build`:
 
 ```bash
 $ php codecept.phar build
 ```
 
 
-## Writing a Sample Scenario
+## Escenario de ejemplo
 
-By default tests are written as narrative scenarios. To make a PHP file a valid scenario, its name should have a `Cept` suffix. 
+Por defecto, las pruebas se esciben como escenarios narrados. Para crear un fichero PHP válido como escenarios el nombre tiene que tener el sufijo `Cept`. 
 
-Let's say, we created a file `tests/acceptance/SigninCept.php`
+Vamos a crear un fichero de pruebas `tests/acceptance/SigninCept.php`
 
-We can do that by running the following command:
+Lo hacemos ejecutando el siguiente comando:
 
 ```bash
 $ php codecept.phar generate:cept acceptance Signin
 ```
 
-A Scenario always starts with Actor class initialization. After that, writing a scenario is just like typing `$I->` and choosing a proper action from the auto-completion list.
+Un escenario siempre comienza por la inicialización de la clase Actor. Después se escriben líneas que comienzan por `$I->` seguidas de la acción adecuada de la lista de autocompletar.
 
 ```php
 <?php
@@ -37,21 +37,21 @@ $I = new AcceptanceTester($scenario);
 ?>
 ```
 
-Let's log in to our website. We assume that we have a 'login' page where we are getting authenticated by providing a username and password. Then we are sent to a user page, where we see the text `Hello, %username%`. Let's look at how this scenario is written in Codeception.
+Vamos a probar nuestro sitio web. Supongamos que tengamos una página de 'login'donde nos identificamos con un usuario y una password. Cuando lo hemos introducido se nos redirige a una página de usuario, donde podemos ver el texto `Hola, %username%`. Veamos como está hecho este escenario en Codeception.
 
 ```php
 <?php
 $I = new AcceptanceTester($scenario);
-$I->wantTo('log in as regular user');
-$I->amOnPage('/login');
-$I->fillField('Username','davert');
-$I->fillField('Password','qwerty');
-$I->click('Login');
-$I->see('Hello, davert');
+$I->wantTo('log in as regular user');   //yo quiero
+$I->amOnPage('/login');                 // yo estoy en la página
+$I->fillField('Username','davert');     // yo relleno el campo usuario con 'davert'
+$I->fillField('Password','qwerty');     // yo relleno el campo password con 'qwerty'
+$I->click('Login');                     // yo pulso el botón 'Login'
+$I->see('Hello, davert');               // yo veo una página que pone 'Hola, davert'
 ?>
 ```
 
-Before we execute this test, we should make sure that the website is running on a local web server. Let's open the `tests/acceptance.suite.yml` file and replace the URL with the URL of your web application:
+Antes de ejecutar la prueba, debemos de asegurarnos de que el sitio web está en el servidor local. Para ello abrimos el fichero `tests/acceptance.suite.yml` y ponemos la URL correcta de nuestra aplicación Web:
 
 ``` yaml
 config:
@@ -59,13 +59,13 @@ config:
         url: 'http://myappurl.local'
 ```
 
-After we configured the URL we can run this test with the `run` command:
+Después de configurarlo, ejecutamos la prueba con el siguiente comando `run`:
 
 ``` bash
 $ php codecept.phar run
 ```
 
-Here is the output we should see:
+Esta es la salida que deberíamos de ver:
 
 ``` bash
 Acceptance Tests (1) -------------------------------
@@ -83,13 +83,13 @@ Time: 1 second, Memory: 21.00Mb
 OK (1 test, 1 assertions)
 ```
 
-Let's get a detailed output:
+Si queremos una información mas detallada:
 
 ```bash
 $ php codecept.phar run acceptance --steps
 ```
 
-We should see a step-by-step report on the performed actions.
+Entonces veríamos un informe paso a paso de las diferentes acciones realizadas.
 
 ```bash
 Acceptance Tests (1) -------------------------------
@@ -99,7 +99,7 @@ Scenario:
 * I fill field "Username" "davert"
 * I fill field "Password" "qwerty"
 * I click "Login"
-* I see "Hello, davert"
+* I see "Hola, davert"
   OK
 ----------------------------------------------------  
 
@@ -108,94 +108,93 @@ Time: 0 seconds, Memory: 21.00Mb
 OK (1 test, 1 assertions)
 ```
 
-That was a very simple test that you can reproduce for your own website.
-By emulating the user's actions you can test all of your websites the same way.
+Esta ha sido una prueba muy simple que se puede repetir en su propio sitio web.
+Al emulas las acciones del usuario, se puede probar todos los sitios web de la misma manera.
+Inténtalo !!
 
-Give it a try!
+## Modulos y Asistentes
 
-## Modules and Helpers
+Las acciones de las clases actor se toman a partir de módulos. Las clases de actor generadas emulan la herencia múltiple. Los módulos estan diseñados ppara tener una acción con un método. De acuerdo con el [principio DRY](http://es.wikipedia.org/wiki/No_te_repitas), si utilizas los mismos componentes de escenarios en diferentes módulos, puedes combinarlos y moverlos a un módulo personalizado. Por defecto, cada grupo tiene un módulo vacio, que se puede utilizar para extender las clases de actor. Se almacenan en los directorios __support__.
 
-The actions in Actor classes are taken from modules. Generated Actor classes emulate multiple inheritance. Modules are designed to have one action performed with one method. According to the [DRY principle](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself), if you use the same scenario components in different modules, you can combine them and move them to a custom module. By default each suite has an empty module, which can be used to extend Actor classes. They are stored in the __support__ directory.
+## Arranque
 
-## Bootstrap
+Cada grupo tiene su propio fichero de arranque. Está en el directorio del grupo con el nombre de `_bootstrap.php`. Este fichero se ejecutará antes que el grupo de pruebas. También hay un archivo de arranque general que esta en el directorio `tests`. Se utiliza para incluir ficheros adicionales.
 
-Each suite has its own bootstrap file. It's located in the suite directory and is named `_bootstrap.php`. It will be executed before test suite. There is also a global bootstrap file located in the `tests` directory. It can be used to include additional files.
+## Formatos de pruebas
 
-## Test Formats
+Codeception soporta tres formatos de pruebas. Junto con el formato basado en escenarios, descritos anteriormente CEPT, también se pueden ejecutar [formatos de fichero de pruebas PHPUnit para pruebas unitarias](http://codeception.com/docs/06-UnitTests), y formato de pruebas [clases basadas en  Cest](http://codeception.com/docs/07-AdvancedUsage#Cest-Classes). Estas se ecplicaran en próximos capítulos. No hay diferencia en como se realizan los test en cada uno de los formatos cuando se ejecutan en el grupo.
 
-Codeception supports three test formats. Beside the previously described scenario-based Cept format, Codeception can also execute [PHPUnit test files for unit testing](http://codeception.com/docs/06-UnitTests), and [class-based Cest](http://codeception.com/docs/07-AdvancedUsage#Cest-Classes) format. They are covered in later chapters. There is no difference in the way the tests of either format will be run in the suite.
+## Configuración
 
-## Configuration
-
-Codeception has a global configuration in `codeception.yml` and a config for each suite. We also support `.dist` configuration files. If you have several developers in a project, put shared settings into `codeception.dist.yml` and personal settings into `codeception.yml`. The same goes for suite configs. For example, the `unit.suite.yml` will be merged with `unit.suite.dist.yml`. 
+Hay un fichero de configuración en Codeception `codeception.yml` y uno de configuración en cada grupo. También soporta laos ficheros de configuración. También soporta ficheros de configuración `.dist`. Si hay varios desarrolladores en un proyecto, en el fichero `codeception.dist.yml` se pone los ajustes compartidos y los ajustes personales en `codeception.yml`. Lo mismo ocurre con las configuraciones de grupo. Por ejemplo, el fichero `unit.suite.yml` se fusionará con `unit.suite.dist.yml`. 
 
 
-## Running Tests
+## Ejecutando las pruebas
 
-Tests can be started with the `run` command.
+Las pruebas se ejecutan con el comando `run`.
 
 ```bash
 $ php codecept.phar run
 ```
 
-With the first argument you can run tests from one suite.
+Con un primer argumento podemos ejecutar pruebas de un grupo.
 
 ```bash
 $ php codecept.phar run acceptance
 ```
 
-To run exactly one test, add a second argument. Provide a local path to the test, from the suite directory.
+Si queremos efectuar una prueba determinada, añadimos un segundo argumento. Se le dice la ruta local al fichero, desde el directorio del grupo.
 
 ```bash
 $ php codecept.phar run acceptance SigninCept.php
 ```
 
-Alternatively you can provide the full path to test file:
+Alternativamente se le pude decir la ruta completa al fichero de prueba:
 
 ```bash
 $ php codecept.phar run tests/acceptance/SigninCept.php
 ```
 
-You can execute one test from a test class (for Cest or Test formats)
+Se puede ejecutar una prueba desde una clase de pruebas (para Cest o formatos de pruebas)
 
 ```bash
 $ php codecept.phar run tests/acceptance/SignInCest.php:anonymousLogin
 ```
 
-You can provide a directory path as well:
+Sele puede decir una la ruta a un directorio:
 
 ```bash
 $ php codecept.phar run tests/acceptance/backend
 ```
 
-This will execute all tests from the backend dir.
+Esto ejecutará todos las pruebas del directorio backend.
 
-To execute a group of tests that are not stored in the same directory, you can organize them in [groups](http://codeception.com/docs/07-AdvancedUsage#Groups).
+Para ejecutar un grupo de pruebas que nos están en el mismo directorio , se puede hacer organizandolo así [groups](http://codeception.com/docs/07-AdvancedUsage#Groups).
 
-### Reports
+### Informes
 
-To generate JUnit XML output, you can provide the `--xml` option, and `--html` for HTML report. 
+Para generar una salida XML JUnit, tenemos que ponerle la opcion `--xml` , y `--html` para informes en HTML.
 
 ```bash
 $ php codecept.phar run --steps --xml --html
 ```
 
-This command will run all tests for all suites, displaying the steps, and building HTML and XML reports. Reports will be stored in the `tests/_output/` directory.
+Este comando ejecutará todos las pruebas de todos los grupos, mostrando los pasos y creando los informes HTML y XML. Los informes se guardan en le directorio `tests/_output/`.
 
-To learn all available options, run the following command:
+Para saber todas las opciones posibles, ejecutar el siguiente comando:
 
 ```bash
 $ php codecept.phar help run
 ```
 
-## Debugging
+## Trazar
 
-To receive detailed output, tests can be executed with the `--debug` option.
-You may print any information inside a test using the `codecept_debug` function.
+Para recibir una salida detallada, las pruebas s epueden ejecutar con la opción `--debug`.
+Se puede imprimir cualquier información dentro de una prueba con la función `codecept_debug`.
 
-### Generators
+### Generadores
 
-There are plenty of useful Codeception commands:
+Hay un montón de útiles comandos Codeception:
 
 * `generate:cept` *suite* *filename* - Generates a sample Cept scenario
 * `generate:cest` *suite* *filename* - Generates a sample Cest test
@@ -205,6 +204,6 @@ There are plenty of useful Codeception commands:
 * `generate:scenarios` *suite* - Generates text files containing scenarios from tests
 
 
-## Conclusion
+## Conclusión
 
-We took a look into the Codeception structure. Most of the things you need were already generated by the `bootstrap` command. After you have reviewed the basic concepts and configurations, you can start writing your first scenario. 
+Veamos la estructura de Codeception. La mayoría de las cosas necesarias ya fueron creadas por el comando `bootstrap`.Después de haber revisado los conceptos y las configuraciones básicas, podemos comenzar a escribir el priemr escenario.
