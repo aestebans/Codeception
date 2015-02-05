@@ -1,34 +1,33 @@
 
-# Unit Tests
+# Pruebas unitarias
 
-Codeception uses PHPUnit as a backend for running tests. Thus, any PHPUnit test can be added to Codeception test suite and then executed.
-If you ever wrote a PHPUnit test then do it just as you did before. 
-Codeception adds some nice helpers to simplify common tasks.
+Codeception utiliza PHPUnit como backend para la realización de pruebas. Por lo tanto, cualquier prueba PHPUnit se puede añadir al conjunto de pruebas Codeception y luego ejecutado. 
+Si alguna vez escribiste una prueba PHPUnit hay que hacerlo como lo hiciste entonces. Codeception añade muchos asistentes para simplificar las tareas comunes. 
+Los fundamentos de las pruebas unitarias se omiten aquí, en lugar obtendrá un conocimiento básico de lo que dispone Codeception se añadir a las pruebas unitarias.
 
-The basics of unit tests are skipped here, instead you will get a basic knowledge of what features Codeception adds to unit tests.
+____Hay que decirlo de nuevo: no es necesario instalar PHPUnit para ejecutar sus pruebas. Codeception puede correrlas también.__
 
-__To say it again: you don't need to install PHPUnit to run its tests. Codeception can run them too.__
+## Creando la prueba
 
-## Creating Test
+Codeception tiene buenos generadores para simplificar la creación de pruebas.
+Puede comenzar con la generación de una prueba PHPUnit clásica con una clase que extiende de la clase  `\PHPUnit_Framework_TestCase`.
 
-Codeception have nice generators to simplify test creation.
-You can start with generating a classical PHPUnit test extending `\PHPUnit_Framework_TestCase` class.
-This can be done by this command:
+Esto puede hacerse con el comando:
 
 ```bash
 $ php codecept.phar generate:phpunit unit Example
 ```
 
-Codeception has its addons to standard unit tests, so let's try them.
-We need another command to create Codeception-powered unit tests.
+Codeception tiene complementos para las pruebas unitarias estándar, así que vamos a tratarlos. Necesitamos otro comando para crear pruebas unitarias con el motor Codeception.
+
 
 ```bash
 $ php codecept.phar generate:test unit Example
 ```
 
-Both tests will create a new `ExampleTest` file located in `tests/unit` directory.
+Se creará un nuevo fichero `ExampleTest` dentro del directorio `tests/unit`.
 
-A test created by `generate:test` command will look like this:
+La prueba creado por el comando `generate:test` se verá así:
 
 ```php
 <?php
@@ -54,12 +53,11 @@ class ExampleTest extends \Codeception\TestCase\Test
 ?>
 ```
 
-This class has predefined `_before` and `_after` methods to start with. You can use them to create a tested object before each test, and destroy it afterwards.
+Esta clase predefinida empieza por los métodos `_before` y `_after`. Se las puede utilizar para crear un objeto probado antes de cada prueba, y destruirlo después.
 
-As you see, unlike in PHPUnit, `setUp` and `tearDown` methods are replaced with their aliases: `_before`, `_after`.
-
-The actual `setUp` and `tearDown` were implemented by parent class `\Codeception\TestCase\Test` and set up the UnitTester class to have all the cool actions from Cept-files to be run as a part of unit tests. Just like in acceptance and functional tests you can choose the proper modules for `UnitTester` class in `unit.suite.yml` configuration file.
-
+Como se ve, a diferencia de PHPUnit, los métodos `setup` y `tearDown` son reemplazados por sus alias: `_before` y ` _after`. 
+El actual `setup` y `tearDown` fueron implementados por la clase padre `\Codeception\TestCase\test` y establecieron la clase UnitTester para tener todas las acciones  Cept-archivos frescas para ejecutarse como parte de las pruebas unitarias. 
+Al igual que en la aceptación y pruebas funcionales se puede elegir los módulos adecuados para clase `UnitTester` en el fichero de configuración `unit.suite.yml`. 
 
 ```yaml
 # Codeception Test Suite Configuration
@@ -70,9 +68,9 @@ modules:
     enabled: [UnitHelper, Asserts]
 ```
 
-### Classical Unit Testing
+### Pruebas unitarias clásicas
 
-Unit tests in Codeception are written in absolutely the same way as it is done in PHPUnit:
+Las pruebas unitarias en Codeception se escriben de la misma manera que como se hace en PHPUnit:
 
 ```php
 <?php
@@ -95,13 +93,14 @@ class UserTest extends \Codeception\TestCase\Test
 ?>
 ```
 
-### BDD Specification Testing
+### Especificación de pruebas BDD
 
-When writing tests you should prepare them for constant changes in your application. Tests should be easy to read and maintain. If a specification to your application is changed, your tests should be updated as well. If you don't have a convention inside your team on documenting tests, you will have issues figuring out what tests were affected by introduction of a new feature.
+Al escribir las pruebas que se debe preparar para los constantes cambios en la aplicación. Las pruebas deben ser fáciles de leer y de mantener. Si se cambia una especificación en la aplicación, las pruebas deben actualizarse también. Si no se tiene un convenio para documentar las pruebas, dentro de su equipo, se tendrán problemas para averiguar qué pruebas se vieron afectados por la introducción de una nueva función. 
 
-That's why it's pretty important not just to cover your application with unit tests, but make unit tests self-explanatory. We do this for scenario-driven acceptance and functional tests, and we should do this for unit and integration tests as well.
+Es por eso que es muy importante no sólo para cubrir su solicitud con pruebas unitarias, sino hacer que las pruebas unitarias sean auto-explicativas. Se hace esto para el escenario de las pruebas de aceptación y pruebas funcionales, y debemos hacer esto tambien para las pruebas unitarias y de integración.
 
-For this case we have a stand-alone project [Specify](https://github.com/Codeception/Specify) (which is included in phar package) for writing specifications inside unit tests.
+Para el caso de tener un proyecto independiente [Specify](https://github.com/Codeception/Specify) (el cual está incluido en el paquete phar) escribir las especificaciones dentro de las pruebas unitarias.
+
 
 ```php
 <?php
