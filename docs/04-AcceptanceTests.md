@@ -1,13 +1,13 @@
-# Acceptance Testing
+# Pruebas de Aceptación
 
-Acceptance testing can be performed by a non-technical person. That person can be your tester, manager or even client.
-If you are developing a web-application (and probably you are) the tester needs nothing more than a web browser to check that your site works correctly. You can reproduce a AcceptanceTester's actions in scenarios and run them automatically after each site change. Codeception keeps tests clean and simple, as if they were recorded from the words of AcceptanceTester.
+Las pruebas de aceptación puede ser realizadas por una persona no técnica. Esa persona puede ser su probador, gerente o incluso clientes. 
+Si está desarrollando una aplicación web (y probablemente lo eres) el probador no necesita nada más que un navegador web para comprobar que su sitio funcione correctamente. Puede reproducir las acciones AcceptanceTester en escenarios y ejecutarlos automáticamente después de cada cambio de sitio. Codeception mantiene pruebas limpio y sencillo, como si se hubiesen registrado a partir de las palabras de AcceptanceTester. 
+No hace ninguna diferencia si el sitio utiliza un CMS o un framework. Se puede probar incluso sitios creados en diferentes plataformas, como Java, .NET, etc. Siempre es una buena idea añadir pruebas a su sitio web. Esto nos asegura que las funcionalidades se mantienen después de realizar los últimos cambios. 
 
-It makes no difference what CMS or Framework is used on the site. You can even test sites created on different platforms, like Java, .NET, etc. It's always a good idea to add tests to your web site. At least you will be sure that site features work after the last changes were made.
+## Escenario de ejemplo 
 
-## Sample Scenario
+Probablemente, la primera prueba que se desea ejecutar sería iniciar sesión. Par poder escribir una prueba de este tipo, todavía se requieren conocimientos básicos de PHP y HTML.
 
-Probably the first test you would want to run would be signing in. In order to write such a test, we still require basic knowledge of PHP and HTML.
 
 ```php
 <?php
@@ -21,7 +21,7 @@ $I->see('Welcome, Davert!');
 ?>
 ```
 
-This scenario can probably be read by non-technical people. Codeception can even 'naturalize' this scenario, converting it into plain English:
+Este escenario probablemente puede ser leído por personas sin conocimientos técnicos. Codeception puede incluso "naturalizar" esta situación, convirtiéndola texto plano Inglés:
 
 ```bash
 I WANT TO SIGN IN
@@ -32,27 +32,27 @@ I click 'LOGIN'
 I see 'Welcome, Davert!'
 ```
 
-Such transformations can be done by command:
+Estas transformaciones se pueden realizar por el comando:
 
 ``` bash
 $ php codecept.phar generate:scenarios
 ```
 
-Generated scenarios will be stored in your ___data__ directory in text files.
+Los escenarios generados se guardan en el directorio ___data__ en ficheros de texto.
 
-**This scenario can be performed either by a simple PHP Browser or by a browser with Selenium WebDriver**. We will start writing our first acceptance tests with a PhpBrowser.
+** Este escenario se puede realizar ya sea mediante un simple navegador PHP o por un navegador con Selenium WebDriver **. Vamos a empezar a escribir nuestras primeras pruebas de aceptación con un PhpBrowser.
 
-## PHP Browser
+## Navegador PHP
 
-This is the fastest way to run acceptance tests, since it doesn't require running an actual browser. We use a PHP web scraper, which acts like a browser: it sends a request, then receives and parses the response. Codeception uses [Guzzle](http://guzzlephp.org) and Symfony BrowserKit to interact with HTML web pages. Please note that you can't test actual visibility of elements, or javascript interactions. Good thing about PhpBrowser is that it can be run in any environment with just PHP and cURL required.
+Esta es la forma más rápida de ejecutar las pruebas de aceptación, ya que no requiere la ejecución de un navegador real. Utilizamos un capturador web en PHP, que actúa como un navegador: envía una solicitud, entonces recibe y analiza la respuesta. Codeception usa [Guzzle] (http://guzzlephp.org) y Symfony BrowserKit para interactuar con páginas Web HTML. Tenga en cuenta que no se puede probar la visibilidad real de elementos, o interacciones javascript. Lo bueno de PhpBrowser es que se puede ejecutar en cualquier entorno, solo es necesario PHP y CURL.
 
-Common PhpBrowser drawbacks:
+Inconvenientes comunes de PhpBrowser: 
 
-* you can click only on links with valid urls or form submit buttons
-* you can't fill fields that are not inside a form
-* you can't work with JavaScript interactions: modal windows, datepickers, etc.
-
-Before we start we need a local copy of the site running on your host. We need to specify the `url` parameter in the acceptance suite config (tests/acceptance.suite.yml).
+* Puede hacer clic sólo en los enlaces con URL válidos o botones de envío de un formulario 
+* No se puede rellenar los campos que no están dentro de un formulario 
+* No se puede trabajar con las interacciones de JavaScript: ventanas modales, datepickers, etc. 
+ 
+Antes de empezar, necesitamos una copia local del sitio que se ejecuta en el host. Tenemos que especificar el parámetro `url` en la configuración de grupo de aceptación (tests/acceptance.suite.yml).
 
 ``` yaml
 class_name: AcceptanceTester
@@ -66,7 +66,7 @@ modules:
             url: [your site's url]
 ```
 
-We should start by creating a 'Cept' file in the __tests/acceptance__ directory. Let's call it __SigninCept.php__. We will write the first lines into it.
+Deberíamos empezar por crear un archivo 'Cept' en el directorio __tests/acceptance__ . Llamémoslo __SigninCept.php__. Vamos a escribir las primeras líneas en él.
 
 ```php
 <?php
@@ -74,8 +74,7 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('sign in with valid account');
 ?>
 ```
-
-The `wantTo` section describes your scenario in brief. There are additional comment methods that are useful to make a Codeception scenario a BDD Story. If you have ever written a BDD scenario in Gherkin, you can write a classic feature story:
+La sección `wantTo` describe el escenario de una manera breve. Existen métodos adicionales de comentarios que son útiles, para hacer un escenario Codeception en una historia BDD. Si alguna vez has escrito un escenario BDD en Gherkin, puede escribir una historia de usuario clasica
 
 ```bash
 As an Account Holder
@@ -83,7 +82,7 @@ I want to withdraw cash from an ATM
 So that I can get money when the bank is closed
 ```
 
-in Codeception style:
+en formato Codeception:
 
 ```php
 <?php
