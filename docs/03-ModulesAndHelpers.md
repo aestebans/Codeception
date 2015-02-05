@@ -1,4 +1,4 @@
-# Módules y Asistentes
+# Módulos y Asistentes
 
 Para crear un entorno confortable de pruebas, Codeception utiliza modularidad para grupo d epurebas que se escribe.
 Los módulos permiten elegir las acciones y afirmaciones que se quieran realizar para las pruebas
@@ -162,13 +162,13 @@ function seeConfigFilesCreated()
 ?>
 ```
 
-### Hooks
+### Ganchos 
 
-Each module can handle events from the running test. A module can be executed before the test starts, or after the test is finished. This can be useful for bootstrap/cleanup actions.
-You can also define special behavior for when the test fails. This may help you in debugging the issue.
-For example, the PhpBrowser module saves the current webpage to the `tests/_output` directory when a test fails.
+Cada módulo puede manejar eventos de la prueba de funcionamiento. Un módulo puede ser ejecutado antes de que comience la prueba, o después de finalizada la prueba. Esto puede ser útil para las acciones de arranque / limpieza. 
+También puede definir un comportamiento especial para cuando falla la prueba. Esto le puede ayudar en la depuración de la cuestión. 
+Por ejemplo, el módulo PhpBrowser guarda la página web actual en el directorio `tests/_output` cuando falla una prueba. 
 
-All hooks are defined in `\Codeception\Module` and are listed here. You are free to redefine them in your module.
+Todos los ganchos están definidos en `\Codeception\module` y se enumeran aquí. Usted es libre de redefinirlos en su módulo.
 
 ```php
 <?php
@@ -210,19 +210,16 @@ All hooks are defined in `\Codeception\Module` and are listed here. You are free
     }
 ?>
 ```
+Tenga en cuenta que los métodos con un prefijo `_` no se agregan a la clase Actor. Esto les permite ser definidos como público, sino utilizados únicamente para fines internos.
 
-Please note that methods with a `_` prefix are not added to the Actor class. This allows them to be defined as public but used only for internal purposes.
+### Depuración 
 
-### Debug
+Como hemos mencionado, el gancho `_failed` puede ayudar en la depuración de una prueba fallida. Usted tiene la oportunidad de guardar el estado de la prueba actual y mostrarla al usuario, pero no se limitan a esto. 
 
-As we mentioned, the `_failed` hook can help in debugging a failed test. You have the opportunity to save the current test's state and show it to the user, but you are not limited to this.
-
-Each module can output internal values that may be useful during debug.
-For example, the PhpBrowser module prints the response code and current URL every time it moves to a new page.
-Thus, modules are not black boxes. They are trying to show you what is happening during the test. This makes debugging your tests less painful.
-
-To display additional information, use the `debug` and `debugSection` methods of the module.
-Here is an example of how it works for PhpBrowser:
+Cada módulo puede sacar valores internos que puede ser útil durante la depuración. 
+Por ejemplo, el módulo PhpBrowser imprime el código de respuesta y la URL actual cada vez que se mueve a una nueva página. De este modo, los módulos no son cajas negras. Ellos están tratando de mostrar lo que está sucediendo durante la prueba. Esto hace que la depuración de pruebas menos doloroso. 
+Para mostrar información adicional, utilice los metodos `debug` y` debugSection` del módulo. 
+He aquí un ejemplo de cómo funciona para PhpBrowser:
 
 ```php
 <?php
@@ -232,7 +229,7 @@ Here is an example of how it works for PhpBrowser:
 ?>    
 ```
 
-This test, running with the PhpBrowser module in debug mode, will print something like this:
+Esta prueba, ejecutándose con el módulo PhpBrowser en modo debug, presentará algo como esto:
 
 ```bash
 I click "All pages"
@@ -241,12 +238,11 @@ I click "All pages"
 ```
 
 
+### Configuración 
 
-### Configuration
+Los módulos se pueden configurar desde el archivo de configuración del grupo, o globalmente en `codeception.yml`. 
 
-Modules can be configured from the suite config file, or globally from `codeception.yml`.
-
-Mandatory parameters should be defined in the `$requiredFields` property of the module class. Here is how it is done in the Db module:
+Parámetros obligatorios deben ser definidos en la propiedad `$requiredFields` de la clase del módulo. Aquí es cómo se hace en el módulo Db:
 
 ```php
 <?php
@@ -255,9 +251,9 @@ class Db extends \Codeception\Module {
 ?>
 ```
 
-The next time you start the suite without setting one of these values, an exception will be thrown. 
+La próxima vez que inicie el grupo de pruebas sin configurar uno de estos valores, se lanzará una excepción. 
 
-For optional parameters, you should set default values. The `$config` property is used to define optional parameters as well as their values. In the WebDriver module we use default Selenium Server address and port. 
+Para los parámetros opcionales, debe establecer los valores por defecto. La propiedad `$config` se utiliza para definir los parámetros opcionales, así como sus valores. En el módulo WebDriver usamos por defecto dirección del servidor de Selenium y el puerto.
 
 ```php
 <?php
@@ -267,8 +263,7 @@ class WebDriver extends \Codeception\Module
     protected $config = array('host' => '127.0.0.1', 'port' => '4444');
 ?>    
 ```
-
-The host and port parameter can be redefined in the suite config. Values are set in the `modules:config` section of the configuration file.
+Los parámetros del host y el puerto se puede redefinir en la configuración del grupo. Los valores se encuentran en la sección `modules:config` del archivo de configuración.
 
 ```yaml
 modules:
@@ -284,12 +279,12 @@ modules:
             repopulate: false
 ```
 
-Optional and mandatory parameters can be accessed through the `$config` property. Use `$this->config['parameter']` to get its value. 
+Los parámetros opcionales y obligatorios se puede acceder a través de la propiedad `$config`. Use `$this-> config['parámetro']` para acceder a su valor.
 
-### Dynamic Configuration
+### Configuración dinámica
 
-If you want to reconfigure a module at runtime, you can use the `_reconfigure` method of the module.
-You may call it from a helper class and pass in all the fields you want to change.
+Si desea volver a configurar un módulo en tiempo de ejecución, puede utilizar el método `_reconfigure` del módulo. Usted puede llamarlo desde una clase de ayuda y modificar todos los campos que desee cambiar.
+
 
 ```php
 <?php
@@ -297,11 +292,11 @@ $this->getModule('WebDriver')->_reconfigure(array('browser' => 'chrome'));
 ?>
 ```
 
-At the end of a test, all your changes will be rolled back to the original config values.
+Al final de la prueba, todos los cambios se revertirán a los valores de configuración originales.
 
-### Additional options
+### Opciones adicionales
 
-Like each class, a Helper can be inherited from a module.
+Como cada clase, un asistente puede ser heredado de un módulo.
 
 ```php
 <?php
@@ -310,11 +305,7 @@ class MySeleniumHelper extends \Codeception\Module\WebDriver  {
 }
 ?>
 ```
-
-In an inherited helper, you replace implemented methods with your own realization.
-You can also replace `_before` and `_after` hooks, which might be an option when you need to customize starting and stopping of a testing session.
-
-If some of the methods of the parent class should not be used in a child module, you can disable them. Codeception has several options for this:
+En un asistente heredado, se reemplazan los métodos implementados con los suyos propios. También puede reemplazar los ganchos `_before`y `_after`, que podrían ser una opción cuando necesita personalizar arranque y paro de una sesión de evaluación. Si algunos de los métodos de la clase padre no debe utilizarse en un módulo hijo, puede desactivarlas. Codeception tiene varias opciones para ello:
 
 ```php
 <?php
@@ -332,10 +323,8 @@ class MySeleniumHelper extends \Codeception\Module\WebDriver
 }
 ?>
 ```
+El parámetro `$includeInheritedActions` a falso, añade la posibilidad de crear alias para los métodos de padres.  Esto permite resolver conflictos entre módulos. Digamos que si queremos usar el módulo `db` con nuestro `SecondDbHelper`  que hereda de `db`. ¿Cómo podemos usar métodos `seeInDatabase` de ambos módulos? Vamos a ver.
 
-Setting `$includeInheritedActions` to false adds the ability to create aliases for parent methods.
- It allows you to resolve conflicts between modules. Let's say we want to use the `Db` module with our `SecondDbHelper`
- that actually inherits from `Db`. How can we use `seeInDatabase` methods from both modules? Let's find out.
 
 ```php
 <?php
@@ -351,13 +340,11 @@ class SecondDbHelper extends Db {
 ?>
 ```
 
-Setting `$includeInheritedActions` to false won't include the methods from parent classes into the generated Actor.
-Still, you can use inherited methods in your helper class.
+El parámetro `$includeInheritedActions` a falso no incluirá los métodos de las clases padre en el Actor generado. Aún así, puede utilizar los métodos heredados en su clase asistente. 
 
-## Conclusion
+## Conclusión 
 
-Modules are the true power of Codeception. They are used to emulate multiple inheritances for Actor classes (UnitTester, FunctionalTester, AcceptanceTester, etc).
-Codeception provides modules to emulate web requests, access data, interact with popular PHP libraries, etc.
-For your application you might need custom actions. These can be defined in helper classes.
-If you have written a module that may be useful to others, share it.
-Fork the Codeception repository, put the module into the __src/Codeception/Module__ directory, and send a pull request.
+Los módulos son el verdadero poder de Codeception. Se utilizan para emular múltiples herencias para las clases Actor (UnitTester, FunctionalTester, AcceptanceTester, etc). 
+Codeception ofrece módulos para emular las peticiones web, datos de acceso, interactuar con las bibliotecas populares de PHP, etc. 
+Para su aplicación es posible que tenga que personalizar acciones. Estas pueden definirse en las clases de asistentes. 
+Si usted ha escrito un módulo que puede ser útil a los demás, compartelo. 
