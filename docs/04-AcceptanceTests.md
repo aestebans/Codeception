@@ -401,11 +401,11 @@ $I->seeElement('#modal');
 ```
 
 
-#### Wait
+#### Esperar
 
-While testing web application, you may need to wait for JavaScript events to occur. Due to its asynchronous nature, complex JavaScript interactions are hard to test. That's why you may need to use `wait` actions, which can be used to specify what event you expect to occur on a page, before proceeding the test.
+Al probar la aplicación web, es posible que tenga que esperar a que ocurran los eventos de JavaScript. Debido a su naturaleza asincrónica, las interacciones complejas de JavaScript son difíciles de probar. Es por eso que usted puede necesitar usar acciones `wait`, que pueden ser utilizados para especificar qué evento se espera que ocurra en una página, antes de continuar la prueba.
 
-For example: 
+Por ejemplo: 
 
 ```php
 <?php
@@ -414,13 +414,14 @@ $I->click('#agree_button');
 ?>
 ```
 
-In this case we are waiting for agree button to appear and then clicking it. If it didn't appear for 30 seconds, test will fail. There are other `wait` methods you may use.
+En este caso estamos esperando a que aparezca el agree_button botón para luego hacer clic en él. Si no aparece durante 30 segundos, la prueba fallará. 
 
-See Codeception's [WebDriver module documentation](http://codeception.com/docs/modules/WebDriver) for the full reference.
+Hay otros métodos de `wait` que se pueden utilizar. Ver [WebDriver module documentation](http://codeception.com/docs/modules/WebDriver) en la documentación de Codeception con la referencia completa. 
 
-### Multi Session Testing 
+### Pruebas Multi-sessión
 
-Codeception allows you to execute actions in concurrent sessions. The most obvious case for it is testing realtime messaging between users on site. In order to do it you will need to launch two browser windows at the same time for the same test. Codeception has very smart concept for doing this. It is called **Friends**.
+Codeception le permite ejecutar acciones en sesiones simultáneas. El caso más evidente de que está poniendo a prueba la mensajería en tiempo real entre los usuarios en el sitio. Para ello, habrá que poner en marcha dos ventanas del navegador al mismo tiempo para la misma prueba. Codeception tiene concepto muy inteligente para hacer esto. Se llama Amigos **Friends**.
+
 
 ```php
 <?php
@@ -439,11 +440,14 @@ $I->see('Hello all!', '.message');
 ?>
 ```
 
+En este caso hemos hecho algunas acciones en segunda ventana con el comando `does` en un objeto Friend. 
+
+### Limpieza de datos 
+
+Durante la prueba, sus acciones pueden cambiar los datos en el sitio. Las pruebas fallarán si tratara de crear o actualizar los mismos datos dos veces. Para evitar este problema, la base de datos debe ser repoblada por cada prueba. Codeception proporciona un módulo `db` para ese propósito. Se carga un volcado de base de datos después de cada prueba superada. Para hacer el trabajo de repoblación, crear un volcado sql de su base de datos y ponerlo en el directorio __/tests/_data__. Establezca la conexión de base de datos y ruta de acceso al volcado en el fichero de configuración  global de Codeception.
+
 In this case we did some actions in second window with `does` command on a friend object.
 
-### Cleaning Things Up
-
-While testing, your actions may change the data on the site. Tests will fail if trying to create or update the same data twice. To avoid this problem, your database should be repopulated for each test. Codeception provides a `Db` module for that purpose. It will load a database dump after each passed test. To make repopulation work, create an sql dump of your database and put it into the __/tests/_data__ directory. Set the database connection and path to the dump in the global Codeception config.
 
 ```yaml
 # in codeception.yml:
@@ -458,7 +462,8 @@ modules:
 
 ### Debugging
 
-Codeception modules can print valuable information while running. Just execute tests with the `--debug` option to see running details. For any custom output use `codecept_debug` function.
+Los módulos de Codeception pueden mostrar información mientras se está ejecutando. Se debe ejecutar los tests con la opción `--debug` para poder ver detalles de la ejecución. Para cualquier tipo personalizado de salida use la función `codecept_debug`.
+
 
 ```php
 <?php
@@ -467,8 +472,8 @@ codecept_debug($I->grabTextFrom('#name'));
 ```
 
 
-On each fail, the snapshot of the last shown page will be stored in the __tests/_log__ directory. PhpBrowser will store HTML code and WebDriver will save the screenshot of a page.
+En cada fracaso, la instantánea de la última página que se muestra, se almacenará en el directorio __tests/_log__. PhpBrowser almacenará código HTML y WebDriver guardará la captura de pantalla de la página. 
 
-## Conclusion
+## Conclusión 
 
-Writing acceptance tests with Codeception and PhpBrowser is a good start. You can easily test your Joomla, Drupal, WordPress sites, as well as those made with frameworks. Writing acceptance tests is like describing a tester's actions in PHP. They are quite readable and very easy to write. Don't forget to repopulate the database on each test run.
+Escribir pruebas de aceptación con Codeception y PhpBrowser es un buen comienzo. Se puede probar fácilmente sus sitios Joomla, Drupal, WordPress, así como los realizados con los frameworks. Escribir pruebas de aceptación es como describir las acciones de un probador en PHP, son muy fácil de leer y muy fácil de escribir. No hay qu eolvidar de repoblar la base de datos en cada ensayo.
