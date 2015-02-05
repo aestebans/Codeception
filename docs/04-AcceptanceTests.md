@@ -93,23 +93,24 @@ $I->lookForwardTo('get money when the bank is closed');
 ?>
 ```
 
-After we have described the story background, let's start writing a scenario.
+Después de haber descrito la historia de fondo, vamos a empezar a escribir un escenario.
 
-The `$I` object is used to write all interactions. The methods of the `$I` object are taken from the `PhpBrowser` and `Db` modules. We will briefly describe them here:
+El objeto `$I` se utiliza para escribir todas las interacciones. Los métodos del objeto `$I` se toman de los modulos `db` y `PhpBrowser`. Vamos a describirlo brevemente aquí:
 
 ```php
 <?php
 $I->amOnPage('/login');
 ?>
 ```
+Asumimos que todos los comandos `am` deben describir el entorno de partida. El comando `amOnPage` establece el punto de partida de una prueba para la página __ / login__. 
 
-We assume that all `am` commands should describe the starting environment. The `amOnPage` command sets the starting point of a test to the __/login__ page.
+Con los `PhpBrowser` se puede hacer clic en los enlaces y llenar los formularios. Eso serán probablemente la mayoría de las acciones.
 
-With the `PhpBrowser` you can click the links and fill the forms. That will probably be the majority of your actions.
 
-#### Click
+#### Click 
 
-Emulates a click on valid anchors. The page from the "href" parameter will be opened. As a parameter you can specify the link name or a valid CSS or XPath selector. 
+Un clic emula pinchar sobre enlaces válidos. La página del parámetro "href" se abrirá. Como parámetro se puede especificar el nombre de enlace o un CSS válido o selector XPath.
+
 
 ```php
 <?php
@@ -123,7 +124,7 @@ $I->click('Login', '.nav');
 ?>
 ```
 
-Codeception tries to locate element either by its text, name, CSS or XPath. You can specify locator type manually by passing array as a parameter. We call this a **strict locator**. Available strict locator types are: 
+Codeception intenta localizar el elemento, ya sea por su texto, nombre, CSS o XPath. Puede especificar el tipo de localización manualmente pasando array como parámetro. A esto le llamamos localizador estricto **strict locator**. Los tipos disponibles de localización estrictos son:
 
 * id
 * name
@@ -139,9 +140,7 @@ $I->click(['link' => 'Login']);
 $I->click(['class' => 'btn']);
 ?>
 ```
-
-Before clicking the link you can perform a check if the link really exists on 
-a page. This can be done by the `seeLink` action.
+Antes de hacer clic en el enlace se puede realizar una comprobación de si el enlace de una página existe. Esto se puede hacer por la acción `seeLink`.
 
 ```php
 <?php
@@ -152,13 +151,13 @@ $I->seeLink('#login a','/login');
 ?>
 ```
 
+#### Formularios
 
-#### Forms
+Hacer clic en los enlaces no es lo que toma más tiempo durante las pruebas de un sitio web. Si el sitio se compone sólo de enlaces puede omitir la automatización de pruebas.
+Lo que lleva mas tiempo son las pruebas de formularios. Codeception proporciona varias maneras de hacerlo. 
 
-Clicking the links is not what takes the most time during testing a web site. If your site consists only of links you can skip test automation.
-The most routine waste of time goes into the testing of forms. Codeception provides several ways of doing that.
+Vamos a enviar este formulario de muestra, dentro de la prueba Codeception.
 
-Let's submit this sample form inside the Codeception test.
 
 ```html
 <form method="post" action="/update" id="update_form">
@@ -175,7 +174,7 @@ Let's submit this sample form inside the Codeception test.
 </form>
 ```
 
-From a user's perspective, a form consists of fields which should be filled, and then an Update button clicked. 
+Desde la perpectiva del usuario , un formulario consiste en un conjunto de campos que tienen que rellenarse y que se envían cuando pincho en el boton Update.
 
 ```php
 <?php
@@ -187,11 +186,12 @@ $I->selectOption('Gender','Male');
 $I->click('Update');
 ?>
 ```
+Para hacer coincidir los campos por sus etiquetas, debe escribir un atributo `for` en la etiqueta. 
 
-To match fields by their labels, you should write a `for` attribute in the label tag.
+Desde la perspectiva del desarrollador, la presentación de un formulario se acaba enviando una solicitud válida al servidor. Muchas veces es más fácil llenar todos los campos a la vez y enviar el formulario sin hacer clic en un botón 'Enviar'. 
 
-From the developer's perspective, submitting a form is just sending a valid post request to the server. Sometimes it's easier to fill all of the fields at once and send the form without clicking a 'Submit' button.
-A similar scenario can be rewritten with only one command.
+Un escenario similar se puede reescribir con un solo comando.
+
 
 ```php
 <?php
@@ -202,10 +202,10 @@ $I->submitForm('#update_form', array('user' => array(
 )));
 ?>
 ```
+El `submitForm` no está emulando las acciones del usuario, pero es muy útil en situaciones en las que el formulario no tiene el formato adecuado, por ejemplo, descubrir que las etiquetas no están o que los campos tienen nombres mal formados o los ids mal escritos, o el formulario es enviado por una llamada javascript. 
 
-The `submitForm` is not emulating a user's actions, but it's quite useful in situations when the form is not formatted properly, for example to discover that labels aren't set or that fields have unclean names or badly written ids, or the form is sent by a javascript call.
+Por defecto, submitForm no envía los valores para los botones. El último parámetro permite especificar qué valores botón debe enviarse, o los valores a enviar se pueden especificar de manera implícita en un segundo parámetro.
 
-By default, submitForm doesn't send values for buttons.  The last parameter allows specifying what button values should be sent, or button values can be implicitly specified in the second parameter.
 
 ```php
 <?php
@@ -224,11 +224,9 @@ $I->submitForm('#update_form', array('user' => array(
 ?>
 ```
 
-#### AJAX Emulation
+#### Emulación AJAX 
 
-As we know, PHP browser can't process JavaScript. Still, all the ajax calls can be easily emulated by sending the proper requests to the server.
-
-Consider using these methods for ajax interactions.
+Como sabemos, el navegador PHP no puede procesar JavaScript. Aún así, todas las llamadas ajax pueden ser fácilmente emuladas mediante el envío de las solicitudes apropiadas al servidor. Considere el uso de estos métodos para las interacciones Ajax.
 
 ```php
 <?php
@@ -237,11 +235,11 @@ $I->sendAjaxPostRequest('/update', array('name' => 'Miles', 'email' => 'Davis'))
 ?>
 ```
 
-#### Assertions
+#### Las confirmaciones
 
-In the PHP browser you can test the page contents. In most cases you just need to check that the required text or element is on the page.
+En el navegador PHP se puede probar la página de contenidos. En la mayoría de los casos sólo tiene que comprobar que el texto o elemento necesario está en la página. 
 
-The most useful command for this is `see`.
+El comando más útil para esto es `see`.
 
 ```php
 <?php
@@ -257,7 +255,7 @@ $I->dontSee('Form is filled incorrectly');
 ?>
 ```
 
-You can check that specific element exists (or not) on a page
+Se puece chequear que un elemento específico existe (o no) en una página
 
 ```php
 <?php
@@ -266,7 +264,8 @@ $I->dontSeeElement('.error');
 ?>
 ```
 
-We also have other useful commands to perform checks. Please note that they all start with the `see` prefix.
+También tenemos otros comandos útiles para realizar comprobaciones. Tenga en cuenta que todos ellos comienzan con el prefijo `see`.
+
 
 ```php
 <?php
@@ -277,9 +276,10 @@ $I->seeLink('Login');
 ?>
 ```
 
-#### Conditional Assertions
+#### Las confirmaciones condicionales
 
-Sometimes you don't want the test to be stopped when an assertion fails. Maybe you have a long-running test and you want it to run to the end. In this case you can use conditional assertions. Each `see` method has a corresponding `canSee` method, and `dontSee` has a `cantSee` method. 
+A veces no se quiere que la prueba se detenga cuando falla una confirmación, cuando se tiene una prueba de larga duración y se desea que se ejecute hasta el final. En este caso se puede usar confirmaciones condicionales. Cada método `see` su correspondiente metodo `canSee`, y el método `dontSee` tiene un método` cantSee`.
+
 
 ```php
 <?php
@@ -289,11 +289,12 @@ $I->cantSeeInField('user[name]', 'Miles');
 ?>
 ```
 
-Each failed assertion will be shown in test results. Still, a failed assertion won't stop the test.
+Cada confirmación fallda se mostrará en los resultados de pruebas. Aún así, no detendrá la prueba.
 
-#### Grabbers
+#### Capturadores 
 
-These commands retrieve data that can be used in test. Imagine, your site generates a password for every user and you want to check the user can log into the site using this password.
+Estos comandos capturan datos que se pueden reutilizar en la prueba. Imagínese, su sitio genera una contraseña para cada usuario y quiere comprobar que el usuario puede iniciar sesión en el sitio utilizando esta contraseña.
+
 
 ```php
 <?php
@@ -307,7 +308,8 @@ $I->click('Log in!');
 ?>
 ```
 
-Grabbers allow you to get a single value from the current page with commands.
+Los capturadores permiten le permiten obtener un valor único de la página actual con los comandos.
+
 
 ```php
 <?php
@@ -317,10 +319,9 @@ $api_key = $I->grabValueFrom('input[name=api]');
 ?>
 ```
 
-#### Comments
+#### Comentarios
 
-Within a long scenario you should describe what actions you are going to perform and what results to achieve.
-Commands like `amGoingTo`, `expect`, `expectTo` help you in making tests more descriptive.
+Dentro de un escenario grande, se debe describir las acciones que van a realizar y qué resultados se esperan alcanzar. Comandos como `amGoingTo`, `expect`, `expectTo` permiten hacer las pruebas mas descriptivas
 
 ```php
 <?php
@@ -334,7 +335,7 @@ $I->see('Form is filled incorrectly');
 
 #### Cookies, Urls, Title, etc
 
-Actions for cookies:
+Acciones para cookies:
 
 ```php
 <?php
@@ -344,7 +345,7 @@ $I->seeCookie('auth');
 ?>
 ```
 
-Actions for checking page title:
+Acciones para chequear el título de una página:
 
 ```php
 <?php
@@ -353,7 +354,7 @@ $I->dontSeeInTitle('Register');
 ?>
 ```
 
-Actions for url:
+Acciones para la url:
 
 ```php
 <?php
@@ -366,12 +367,13 @@ $user_id = $I->grabFromCurrentUrl('~$/user/(\d+)/~');
 
 ## Selenium WebDriver
 
-A nice feature of Codeception is that most scenarios can be easily ported between the testing backends.
-Your PhpBrowser tests we wrote previously can be executed inside a real browser (or even PhantomJS) with Selenium WebDriver.
+Una característica interesante de Codeception es que la mayoría de los escenarios se pueden trasladar fácilmente entre los backends de prueba. 
+Sus pruebas PhpBrowser que escribimos anteriormente pueden ejecutarse dentro de un navegador real (o incluso PhantomJS) con Selenium WebDriver. 
 
-The only thing we need to change is to reconfigure and rebuild the AcceptanceTester class, to use **WebDriver** instead of PhpBrowser.
+Lo único que tenemos que cambiar es reconfigurar y reconstruir la clase AcceptanceTester, utilizar **WebDriver ** en lugar de PhpBrowser.
 
-Modify your `acceptance.suite.yml` file:
+
+Modificque el fichero `acceptance.suite.yml`:
 
 ```yaml
 class_name: AcceptanceTester
@@ -385,11 +387,12 @@ modules:
             browser: firefox            
 ```
 
-In order to run Selenium tests you need to [download Selenium Server](http://seleniumhq.org/download/) and get it running (Alternatively you may use [PhantomJS](http://phantomjs.org/) headless browser in `ghostdriver` mode).
+Con el fin de ejecutar las pruebas de Selenium se necesita  [download Selenium Server](http://seleniumhq.org/download/) y ponerlo en marcha [PhantomJS](http://phantomjs.org/) en modo `ghostdriver`). 
 
-If you run acceptance tests with Selenium, Firefox will be started and all actions will be performed step by step using browser engine. 
+Si ejecuta pruebas de aceptación con Selenium, Firefox se iniciará y todas las acciones se realizará paso a paso utilizando el motor de navegador. 
 
-In this case `seeElement` won't just check that the element exists on a page, but it will also check that element is actually visible to user.
+En este caso `seeElement` no sólo comprueba que existe el elemento en una página, sino que también comprobará que elemento es realmente visible al usuario.
+
 
 ```php
 <?php 
