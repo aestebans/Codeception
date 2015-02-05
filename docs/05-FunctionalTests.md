@@ -1,12 +1,16 @@
-# Functional Tests
+# Pruebas Funcionales 
 
-Now that we've written some acceptance tests, functional tests are almost the same, with just one major difference: functional tests don't require a web server to run tests.
+Ahora que hemos escrito algunas pruebas de aceptación, las pruebas funcionales son casi lo mismo, con una sola diferencia importante: las pruebas funcionales no requieren un servidor web para ejecutar las pruebas. 
 
-In simple terms we set `$_REQUEST`, `$_GET` and `$_POST` variables and then we execute application from a test. This may be valuable as functional tests are faster and provide detailed stack traces on failures.
+Establecemos las variables `$ _REQUEST`,` $ _GET` y `$ _POST` y luego ejecutamos la aplicación de una prueba. Esto es muy valorable porque las pruebas funcionales son más rápidas y ofrecen trazas detalladas en los fallos.
 
-Codeception can connect to different web frameworks which support functional testing: Symfony2, Laravel4, Yii2, Zend Framework and others. You just need to enable desired module in your functional suite config to start.
+Codeception puede conectarse a diferentes frameworks que soportan pruebas funcionales: Symfony2, Laravel4, Yii2, Zend Framework y otros. Sólo tiene que activar el módulo deseado en la configuración para comenzar. 
 
-Modules for all of these frameworks share the same interface, and thus your tests are not bound to any one of them. This is a sample functional test.
+Los módulos para todos estos frameworks comparten la misma interfaz, y por lo tanto sus pruebas no son específicas de ninguno de ellos. 
+
+Esta es un ejemplo de prueba funcional.
+
+
 
 ```php
 <?php
@@ -21,36 +25,37 @@ $I->see('Hello, Miles', 'h1');
 ?>
 ```
 
-As you see you can use same tests for functional and acceptance testing. 
+Como se puede ver se puede usar mismas pruebas para pruebas funcionales y de aceptación.
 
-## Pitfalls
+## Trampas
 
-Acceptance tests are usually much slower than functional tests. But functional tests are less stable as they run Codeception and application in one environment.
+Las pruebas de aceptación son generalmente mucho más lentas que las pruebas funcionales. Pero las pruebas funcionales son menos estables, ya que corren Codeception y aplicación en un mismo entorno.
 
 #### Headers, Cookies, Sessions
 
-One of the common issues with functional tests is usage of PHP functions that deal with `headers`, `sessions`, `cookies`.
-As you know, `header` function triggers an error if it is executed more than once for the same header. In functional tests we run application multiple times, thus, we will get lots of trash errors in the result.
+Uno de los problemas comunes con las pruebas funcionales es el uso de las funciones de PHP que tienen que ver con `headers`,` sessions`, `cookies`. 
+La función `header` desencadena un error si se ejecuta más de una vez por el mismo encabezado. En las pruebas funcionales corremos aplicaciones múltiples veces, por lo tanto, vamos a tener un montón de errores de basura en el resultado.
 
-#### Shared Memory
+#### Memoria Compartida 
 
-In functional testing unlike the traditional way, PHP application does not stop after it finished processing a request. 
-As all requests run in one memory container they are not isolated.
-So **if you see that your tests are mysteriously failing when they shouldn't - try to execute a single test.**
-This will check if tests were isolated during run. Because it's really easy to spoil environment as all tests are run in shared memory.
-Keep your memory clean, avoid memory leaks and clean global and static variables.
+En las pruebas funcionales a diferencia de la forma tradicional, aplicaciones PHP no se detiene después de que terminó de procesar una solicitud. 
 
-## Enabling Framework Modules
+Como todas las solicitudes se ejecutan en un contenedor de memoria no son aislados. 
 
-You have a functional testing suite in `tests/functional` dir.
-To start you need to include one of the framework modules in suite config file: `tests/functional.suite.yml`. Below we provide simplified instructions for setting up functional tests with the most popular PHP frameworks.
+Así ** si usted ve que sus pruebas estan fallando misteriosamente cuando no deberían. - Hay que intentar ejecutar una sola prueba ** Esto comprobará si se aislaron las pruebas durante la marcha. Debido a que es muy fácil de estropear el entorno ya que todas las pruebas se practican en la memoria compartida. Mantenga su memoria limpia, evitar pérdidas de memoria y las variables globales y estáticas limpias.
+
+
+## Habilitando módulos de frameworks
+
+Tenemos un grupo de pruebas funcionales en el directorio `tests/functional`. Para empezar es necesario incluir uno de los módulos del framework en el archivo de configuración del grupo: `tests/functional.suite.yml`. A continuación se proporcionan instrucciones simplificadas para la creación de pruebas funcionales con los frameworks PHP más populares.
+
 
 ### Symfony2
 
-To perform Symfony2 integrations you don't need to install any bundles or do any configuration changes.
-You just need to include the `Symfony2` module into your test suite. If you also use Doctrine2, don't forget to include it too.
+Para llevar a cabo integraciones Symfony2 no es necesario instalar nada. Sólo tiene se debe incluir el módulo `Symfony2` en el grupo de pruebas. Si también se utiliza Doctrine2, hay que incluir éste también.
 
-Example of `functional.suite.yml`
+
+Ejemplo de `functional.suite.yml`
 
 ```yaml
 class_name: FunctionalTester
@@ -58,15 +63,13 @@ modules:
     enabled: [Symfony2, Doctrine2, TestHelper] 
 ```
 
-By default this module will search for App Kernel in the `app` directory.
+Por defecto, este módulo buscará App kernel en el directorio `app`. El módulo utiliza el perfil Symfony para proporcionar información y confirmaciones adicionales.
 
-The module uses the Symfony Profiler to provide additional information and assertions.
-
-[See the full reference](http://codeception.com/docs/modules/Symfony2)
+[Referencias completas](http://codeception.com/docs/modules/Symfony2)
 
 ### Laravel 4
 
-[Laravel](http://codeception.com/docs/modules/Laravel4) module requires no configuration and can be easily set up.
+[Laravel](http://codeception.com/docs/modules/Laravel4) el módulo no requiere configuración y se pone en marcha facilmente.
 
 ```yaml
 class_name: FunctionalTester
@@ -77,13 +80,14 @@ modules:
 
 ### Yii2
 
-Yii2 tests are included in [Basic](https://github.com/yiisoft/yii2-app-basic) and [Advanced](https://github.com/yiisoft/yii2-app-advanced) application templates. Follow Yii2 guides to start.
+Yii2 pruebas se incluyen en [Básico] (https://github.com/yiisoft/yii2-app-basic) y [Advanced] (https://github.com/yiisoft/yii2-app-advanced) plantillas de aplicación. Siga Yii2 guía para empezar.
+
+Plantillas de pruebas Yii2 estan incluidas en [Basic](https://github.com/yiisoft/yii2-app-basic) and [Advanced](https://github.com/yiisoft/yii2-app-advanced). Ver las guías Yii2 para empezar.
 
 ### Yii
 
-By itself Yii framework does not have an engine for functional testing.
-So Codeception is the first and the only functional testing framework for Yii.
-To use it with Yii include `Yii1` module into config.
+El framework Yii no tiene un motor de pruebas funcionales. Es por ello que Codeception es el primero y el único framework de pruebas funcionales para Yii. Para utilizarlo con Yii incluye el módulo `Yii1` en config.
+
 
 ```yaml
 class_name: FunctionalTester
@@ -91,12 +95,11 @@ modules:
     enabled: [Yii1, TestHelper]
 ```
 
-To avoid common pitfalls we discussed earlier, Codeception provides basic hooks over Yii engine.
-Please set them up following [the installation steps in module reference](http://codeception.com/docs/modules/Yii1).
+Para evitar los errores comunes, Codeception proporciona enlaces básicos sobre motor Yii. Por favor configurarlas siguiendo la guía [instalación paso a paso, referencia del módulo](http://codeception.com/docs/modules/Yii1).
 
 ### Zend Framework 2
 
-Use [ZF2](http://codeception.com/docs/modules/ZF2) module to run functional tests inside Zend Framework 2.
+Usar el módulo [ZF2](http://codeception.com/docs/modules/ZF2) para ejecutar pruebas funcionales con el framework Zend Framework 2.
 
 ```yaml
 class_name: FunctionalTester
@@ -106,10 +109,10 @@ modules:
 
 ### Zend Framework 1.x
 
-The module for Zend Framework is highly inspired by ControllerTestCase class, used for functional testing with PHPUnit. 
-It follows similar approaches for bootstrapping and cleaning up. To start using Zend Framework in your functional tests, include the `ZF1` module.
+El módulo de Zend Framework está muy inspirado por la clase ControllerTestCase, utilizado para pruebas funcionales con PHPUnit. 
+De ello se desprende enfoques similares para arranque y la limpieza. Para empezar a utilizar Zend Framework en sus pruebas funcionales, incluir el módulo `ZF1 `.
 
-Example of `functional.suite.yml`
+Ejemplo de `functional.suite.yml`
 
 ```yaml
 class_name: FunctionalTester
@@ -121,7 +124,7 @@ modules:
 
 ### Phalcon 1.x
 
-`Phalcon1` module requires creating bootstrap file which returns instance of `\Phalcon\Mvc\Application`. To start writing functional tests with Phalcon support you should enable `Phalcon1` module and provide path to this bootstrap file:
+El módulo `Phalcon1` requiere la creación de archivo de arranque que devuelve instancia de `\Phalcon\Mvc\A pplication`. Para comenzar a escribir pruebas funcionales con apoyo Phalcon debe habilitar módulo `Phalcon1` y proporcionar ruta del archivo de arranque:
 
 ```yaml
 class_name: FunctionalTester
@@ -132,13 +135,13 @@ modules:
             bootstrap: 'app/config/bootstrap.php'
 ```
 
-[See the full reference](http://codeception.com/docs/modules/Phalcon1)
+[Guía de referencia](http://codeception.com/docs/modules/Phalcon1)
 
-## Writing Functional Tests
+## Escribiendo pruebas funcionales
 
-Functional tests are written in the same manner as [Acceptance Tests](http://codeception.com/docs/04-AcceptanceTests) with `PhpBrowser` module enabled. All framework modules and `PhpBrowser` module share the same methods and the same engine.
+Las pruebas funcionales se escriben de la misma manera que las pruebas de Aceptación con el módulo `PhpBrowser` habilitado [Pruebas de Aceptación](http://codeception.com/docs/04-AcceptanceTests). Todos los módulos de framework y el módulo `PhpBrowser` comparten los mismos métodos y el mismo motor.
 
-Therefore we can open a web page with `amOnPage` command.
+Por lo tanto podemos abrir una página web con el comando `amOnPage`.
 
 ```php
 <?php
@@ -147,7 +150,7 @@ $I->amOnPage('/login');
 ?>
 ```
 
-We can click links to open web pages of application.
+Podemos hacer clic en vínculos para abrir páginas web de la aplicación.
 
 ```php
 <?php
@@ -161,7 +164,8 @@ $I->click(['class' => 'logout']);
 ?>
 ```
 
-We can submit forms as well:
+Podemos enviar formularios, así:
+
 
 ```php
 <?php
@@ -173,7 +177,7 @@ $I->click('Submit', '#login');
 ?>
 ```
 
-And do assertions:
+Y hacer confirmaciones:
 
 ```php
 <?php
@@ -183,12 +187,13 @@ $I->seeCurrentUrlEquals('/profile/john');
 ?>
 ```
 
-Framework modules also contain additional methods to access framework internals. For instance, `Laravel4`, `Phalcon1`, and `Yii2` modules have `seeRecord` method which uses ActiveRecord layer to check that record exists in database.
-`Laravel4` module also contains methods to do additional session checks. You may find `seeSessionHasErrors` useful when you test form validations.
+Los módulos de Framework también contienen métodos adicionales para accesos internos a los frameworks. Por ejemplo, los módulos `Laravel4`,` Phalcon1`, y `Yii2` tienen `seeRecord` que utiliza la capa ActiveRecord para comprobar que ese registro existe en la base de datos. 
 
-Take a look at the complete reference for module you are using. Most of its methods are common for all modules but some of them are unique.
+El módulo `Laravel4` también contiene métodos adicionales para hacer comprobaciones de sesión. Se puede encontrar `seeSessionHasErrors` cuando se prueba validaciones de formularios. 
 
-Also you can access framework globals inside a test or access Depenency Injection containers inside `FunctionalHelper` class.
+Hay una referencia completa para el módulo que se está utilizando. La mayoría de sus métodos son comunes para todos los módulos, pero algunos de ellos son únicos.
+
+También se puede acceder a variables globales del framework dentro de una prueba o acceso a los contenedores de Inywcción de Dependencias dentro de la clase `FunctionalHelper`.
 
 ```php
 <?php
@@ -206,15 +211,16 @@ class FunctionalHelper extends \Codeception\Module
 ?>
 ```
 
-We accessed Symfony2 internal kernel and took a service out of container. We also created custom method in `FunctionalTester` class which can be used in tests.
+Nosotros accedemos al nucleo interno de Symfony2 y tomamos un servicio de contenedor. También hemos creado un método personalizado en la clase `FunctionalTester` para poder ser utilizado en las pruebas. 
 
-You can learn more about accessing framework you use by checking *Public Properties* section in the reference for the corresponding module. 
+Se puede aprender más acerca de cómo acceder al framework que se utiliza chekeando en la sección *Public Properties* en la referencia del módulo correspondiente.
 
-## Error Reporting
 
-By default Codeception uses `E_ALL & ~E_STRICT & ~E_DEPRECATED` error reporting level. 
-In functional tests you might want to change this level depending on framework's error policy.
-The error reporting level can be set in the suite configuraion file:
+## Informes de error
+
+Por defecto el niverl de informes en Codeception es `E_ALL & ~E_STRICT & ~E_DEPRECATED`. 
+En las pruebas funcionales es posible que desee cambiar este nivel, según la política error de framework.
+El nivel de informes se pueede poner en el fichero de configuración del grupo de pruebas:
 
 ```yaml
 class_name: FunctionalTester
@@ -223,11 +229,11 @@ modules:
 error_level: "E_ALL & ~E_STRICT & ~E_DEPRECATED"
 ```
 
-`error_level` can be set globally in `codeception.yml` file.
+`error_level` puede ponerse de forma global en el fichero `codeception.yml`.
 
 
-## Conclusion
+## Conclusión
 
-Functional tests are great if you are using powerful frameworks. By using functional tests you can access and manipulate their internal state. 
-This makes your tests shorter and faster. In other cases, if you don't use frameworks there is no practical reason to write functional tests.
-If you are using a framework other than the ones listed here, create a module for it and share it with community.
+Las pruebas funcionales son grandes si se está utilizando toda la potencia de los frameworks. Mediante el uso de las pruebas de funcionamiento se puede acceder y manipular su estado interno. 
+Esto hace que sus pruebas sean más cortas y más rápidas. En otros casos, si no se utiliza frameworks no hay ninguna razón práctica para escribir pruebas funcionales. 
+Si se está utilizando un framework distinto de los enumerados aquí, cree un módulo para ello y compartirlo con la comunidad.
