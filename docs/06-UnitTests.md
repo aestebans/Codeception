@@ -131,11 +131,12 @@ class UserTest extends \Codeception\TestCase\Test
 ?>        
 ```
 
-Using `specify` codeblocks you can describe any piece of test. This makes tests much cleaner and understandable for everyone in your team.
+Usando los bloques de código `specify` se puede describir una trozo de código de prueba. Esto hace las pruebas mucho mas claras y entendibles para cada uno de los elementos del equipo.
 
-Code inside `specify` blocks is isolated. In the example above any change to `$this->user` (as any other object property), will not be reflected in other code blocks.
+El código dentro de cada bloque `specify`está aislado. En el ejemplo anterior cualquier cambio en `$this-> User` (como cualquier otra propiedad del objeto), no se verá reflejada en otros bloques de código.
 
-Also you may add [Codeception\Verify](https://github.com/Codeception/Verify) for BDD-style assertions. This tiny library adds more readable assertions, which is quite nice, if you are always confused of which argument in `assert` calls is expected and which one is actual.
+También se puede agregar [Codeception\Verify](https://github.com/Codeception/Verify) para las confirmaciones de tipo BDD. Esta pequeña librería añade confirmaciones más legibles, que es bastante agradable, si se confunde con el argumento en el `assert` que espera llamadas y cuál es actual.
+
 
 ```php
 <?php
@@ -143,9 +144,10 @@ verify($user->getName())->equals('john');
 ?>
 ```
 
-## Using Modules
+## Usando Módulos
 
-As in scenario-driven functional or acceptance tests you can access Actor class methods. If you write integration tests, it may be useful to include `Db` module for database testing. 
+Al igual que en el escenario impulsado por pruebas funcionales o de aceptación se puede acceder a métodos de la clase Actor. Para escribir las pruebas de integración, puede ser útil incluir módulo `db` para las pruebas de base de datos.
+
 
 ```yaml
 # Codeception Test Suite Configuration
@@ -156,11 +158,12 @@ modules:
     enabled: [Db, UnitHelper]
 ```
 
-To access UnitTester methods you can use `UnitTester` property in a test.
+Para acceder a los métodos UnitTester puede usar `propiedad UnitTester` en una prueba.
 
-### Testing Database
+### Probando la base de datos
 
-Let's see how you can do some database testing:
+Veamos como se puede hacer realizar pruebas a una base de datos:
+
 
 ```php
 <?php
@@ -176,14 +179,15 @@ function testSavingUser()
 ?>
 ```
 
-Database will be cleaned and populated after each test, as it happens for acceptance and functional tests.
-If it's not your required behavior, please change the settings of `Db` module for the current suite.
+La base de datos se limpiará y se llenará después de cada prueba, en el caso de pruebas de aceptación y pruebas funcionales. Y si no tiene el comportamiento requerido, cambiar la configuración de módulo `db` para el grupo de pruebas actual. 
 
-### Accessing Module
 
-Codeception allows you to access properties and methods of all modules defined for this suite. Unlike using the UnitTester class for this purpose, using module directly grants you access to all public properties of that module.
+### Módulo de Acceso 
 
-For example, if you use `Symfony2` module, here is the way you can access Symfony container:
+Codeception le permite acceder a propiedades y métodos de todos los módulos definidos en el grupo de pruebas. A diferencia de uso de la clase UnitTester para este fin, utilizando el módulo donaciones directamente el acceso a todas las propiedades públicas de ese módulo.
+
+Por ejemplo, si se utiliza el módulo `Symfony2`, esta es la manera para acceder contenedor Symfony:
+
 
 ```php
 <?php
@@ -194,13 +198,14 @@ $container = $this->getModule('Symfony2')->container;
 ?>
 ```
 
-All public variables are listed in references for corresponding modules.
+Todas las variables públicas están en la relación de referencias de los correspondientes módulos.
 
 ### Cest
 
-Alternatively to testcases extended from `PHPUnit_Framework_TestCase` you may use Codeception-specific Cest format. It does not require to be extended from any other class. All public methods of this class are tests.
+Como alternativa para casos de prueba se extendió desde `PHPUnit_Framework_TestCase` se puede usar el espécifico formato Cest de Codeception. No requiere que se extienda a cualquier otra clase. Todos los métodos públicos de esta clase son pruebas. 
 
-The example above can be rewritten in scenario-driven manner like this:
+El ejemplo anterior se puede reescribir de manera escenario impulsado por la siguiente:
+
 
 ```php
 <?php
@@ -223,8 +228,8 @@ class UserCest
 }
 ?>
 ```
+Para la prueba unitaria se puede incluir el módulo `Asserts`, que añade confirmaciones regulares para la clase UnitTester a los que puede acceder desde la variable `$t`.
 
-For unit testing you may include `Asserts` module, that adds regular assertions to UnitTester which you may access from `$t` variable.
 
 ```yaml
 # Codeception Test Suite Configuration
@@ -235,13 +240,14 @@ modules:
     enabled: [Asserts, Db, UnitHelper]
 ```
 
-[Learn more about Cest format](http://codeception.com/docs/07-AdvancedUsage#Cest-Classes).
+[Aprender mas sobre el formato Cest format](http://codeception.com/docs/07-AdvancedUsage#Cest-Classes).
 
 ### Stubs
 
-Codeception provides a tiny wrapper over PHPUnit mocking framework to create stubs easily. Include `\Codeception\Util\Stub` to start creating dummy objects.
+Codeception ofrece un pequeño envoltorio sobre PHPUnit burlándose marco para crear stubs fácilmente. Incluir `\Codeception\util\Stub` para iniciar la creación de objetos ficticios. 
 
-In this example we instantiate object without calling a constructor and replace `getName` method to return value *john*.
+En este ejemplo, se crea una instancia del objeto sin llamar a un constructor y reemplazamos método `getName` para devolver el valorvolver valor *john*.
+
 
 ```php
 <?php
@@ -249,11 +255,12 @@ $user = Stub::make('User', ['getName' => 'john']);
 $name = $user->getName(); // 'john'
 ?>
 ```
+Stubs se crean con PHPUnit burlaándose de framework. Alternativamente, puede utilizar
+[Mockery](https://github.com/padraic/mockery) (with [Mockery module](https://github.com/Codeception/MockeryModule)), [AspectMock](https://github.com/Codeception/AspectMock) u otros.
 
-Stubs are created with PHPUnit's mocking framework. Alternatively you can use [Mockery](https://github.com/padraic/mockery) (with [Mockery module](https://github.com/Codeception/MockeryModule)), [AspectMock](https://github.com/Codeception/AspectMock) or others.
-
-Full reference on Stub util class can be found [here](/docs/reference/Stub).
+Una completa referencia de la util clase Stub se puede encontrar en [here](/docs/reference/Stub).
 
 ## Conclusion
 
-PHPUnit tests are first-class citizens in test suites. Whenever you need to write and execute unit tests, you don't need to install PHPUnit, but use Codeception to execute them. Some nice features can be added to common unit tests by integrating Codeception modules. For the most of unit and integration testing PHPUnit tests are just enough. They are fast and easy to maintain.
+Las pruebas PHPUnit son ciudadanos de primera clase en los bancos de pruebas. Siempre que necesite para escribir y ejecutar pruebas unitarias, no es necesario instalar PHPUnit, pero utilice Codeception para ejecutarlos. Algunas características agradables se pueden añadir a las pruebas unitarias comunes mediante la integración de módulos Codeception. Para la mayor parte de las pruebas PHPUnit unitarias y pruebas de integración son lo suficiente. Los módulos son rápidos y fáciles de mantener.
+
